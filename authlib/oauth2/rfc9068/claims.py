@@ -48,7 +48,7 @@ class JWTAccessTokenClaims(JWTClaims):
 
     def validate_amr(self):
         amr = self.get("amr")
-        if amr and not isinstance(self["amr"], list):
+        if amr and not isinstance(self["amr"], (list, str)):
             raise InvalidClaimError("amr")
 
     def validate_scope(self):

@@ -122,7 +122,7 @@ class IDToken(JWTClaims):
         value is an array of case sensitive strings.
         """
         amr = self.get("amr")
-        if amr and not isinstance(self["amr"], list):
+        if amr and not isinstance(self["amr"], (list, str)):
             raise InvalidClaimError("amr")
 
     def validate_azp(self):
