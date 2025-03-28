@@ -48,8 +48,20 @@ class JWTAccessTokenClaims(JWTClaims):
 
     def validate_amr(self):
         amr = self.get("amr")
-        if amr and not isinstance(self["amr"], list):
+        if not amr:
+            return
+        if isinstance(amr, str):
+            amr = [amr]
+        if not isinstance(amr, list):
             raise InvalidClaimError("amr")
+        IANA_AMR_VALUES = [
+            "face", "fpt", "geo", "hwk", "iris", "kba", "mca", "mfa", "otp",
+            "pin", "pop", "pwd", "rba", "retina", "sc", "sms", "swk", "tel",
+            "user", "vbm", "wia",
+        ]
+        for value in amr:
+            if value not in IANA_AMR_VALUES:
+                raise InvalidClaimError("amr")
 
     def validate_scope(self):
         return self._validate_claim_value("scope")
