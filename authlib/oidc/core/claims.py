@@ -122,8 +122,18 @@ class IDToken(JWTClaims):
         value is an array of case sensitive strings.
         """
         amr = self.get("amr")
-        if amr and not isinstance(self["amr"], (list, str)):
+        if isinstance(amr, str):
+            amr = [amr]
+        if amr and not isinstance(amr, list):
             raise InvalidClaimError("amr")
+        IANA_AMR_VALUES = [
+            "face", "fpt", "geo", "hwk", "iris", "kba", "mca", "mfa", "otp",
+            "pin", "pop", "pwd", "rba", "retina", "sc", "sms", "swk", "tel",
+            "user", "vbm", "wia",
+        ]
+        for value in amr:
+            if value not in IANA_AMR_VALUES:
+                raise InvalidClaimError("amr")
 
     def validate_azp(self):
         """OPTIONAL. Authorized party - the party to which the ID Token was
