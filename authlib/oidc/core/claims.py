@@ -122,9 +122,11 @@ class IDToken(JWTClaims):
         value is an array of case sensitive strings.
         """
         amr = self.get("amr")
+        if not amr:
+            return
         if isinstance(amr, str):
             amr = [amr]
-        if amr and not isinstance(amr, list):
+        if not isinstance(amr, list):
             raise InvalidClaimError("amr")
         IANA_AMR_VALUES = [
             "face", "fpt", "geo", "hwk", "iris", "kba", "mca", "mfa", "otp",
